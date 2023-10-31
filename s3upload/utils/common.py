@@ -1,5 +1,6 @@
 import asyncio
 import os
+from datetime import datetime
 from functools import wraps
 from pathlib import Path
 from typing import (
@@ -9,6 +10,7 @@ from typing import (
     Callable,
     Coroutine,
 )
+from uuid import uuid4
 
 
 def coroutine(func: Callable[..., Coroutine]) -> Callable[..., Any]:
@@ -27,5 +29,11 @@ async def resource_from_context(
 
 
 def resolve_default_config() -> Path:
-    root_dir = Path(os.path.dirname(os.path.dirname(__file__)))
+    root_dir = Path(
+        os.path.dirname(os.path.dirname(os.path.dirname(__file__)))
+    )
     return root_dir / "config.yaml"
+
+
+def generate_filename() -> str:
+    return f"{uuid4().hex}_{datetime.utcnow().strftime('%Y-%m-%d-%H-%M')}.zip"
